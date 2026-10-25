@@ -1,0 +1,601 @@
+<title>Plano de Xadrez da Gabi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap">
+<style>
+/* Layout: uma coluna estreita, abas em pílulas no topo, cartões arredondados em tons de rosa. */
+:root{
+  --bg:#FFF3F8; --surface:#FFFFFF; --surface2:#FFE6F0; --ink:#4B1D36; --muted:#855270;
+  --pink:#D6336F; --pink-ink:#FFFFFF; --pink-soft:#FFD3E5; --accent-text:#B01F58; --line:#F6C6DA;
+  --good:#1F7F5C; --good-soft:#D9F3E8; --warn-soft:#FFF0C9; --warn:#8A5A00;
+  --shadow:0 6px 18px rgba(214,51,111,.13);
+  --font-display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --font-body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#26111C; --surface:#35192A; --surface2:#46223A; --ink:#FFE9F2; --muted:#E2AFC8;
+    --pink:#FF7DAE; --pink-ink:#3A0F24; --pink-soft:#5C2A47; --accent-text:#FF9AC1; --line:#5B2F47;
+    --good:#6FD6AB; --good-soft:#1F3F34; --warn-soft:#4A3A12; --warn:#F2CF73;
+    --shadow:0 6px 18px rgba(0,0,0,.28);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#26111C; --surface:#35192A; --surface2:#46223A; --ink:#FFE9F2; --muted:#E2AFC8;
+  --pink:#FF7DAE; --pink-ink:#3A0F24; --pink-soft:#5C2A47; --accent-text:#FF9AC1; --line:#5B2F47;
+  --good:#6FD6AB; --good-soft:#1F3F34; --warn-soft:#4A3A12; --warn:#F2CF73;
+  --shadow:0 6px 18px rgba(0,0,0,.28);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.5;
+  padding-block:20px 40px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap{max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:16px}
+h1,h2,h3{font-family:var(--font-display); font-weight:600; line-height:1.2; margin:0; text-wrap:balance}
+h1{font-size:1.9rem}
+h2{font-size:1.3rem}
+h3{font-size:1.05rem}
+p{margin:0}
+small{color:var(--muted)}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--pink); outline-offset:2px}
+
+/* Cabeçalho */
+.hero{background:var(--pink-soft); border-radius:28px; padding:20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; position:relative; overflow:hidden}
+.hero-text{flex:1 1 220px; min-width:0; display:flex; flex-direction:column; gap:6px}
+.eyebrow{font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-text); font-weight:700}
+.hero p{color:var(--ink)}
+.ring{flex:0 0 auto; width:112px; height:112px; position:relative}
+.ring svg{width:100%; height:100%; transform:rotate(-90deg)}
+.ring .track{stroke:var(--surface); fill:none}
+.ring .bar{stroke:var(--pink); fill:none; stroke-linecap:round; transition:stroke-dashoffset .4s}
+.ring-label{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:var(--font-display)}
+.ring-label b{font-size:1.5rem; line-height:1}
+.ring-label span{font-size:.7rem; color:var(--muted); font-family:var(--font-body)}
+.sparkle{position:absolute; width:22px; height:22px; fill:var(--pink); opacity:.55}
+
+/* Abas */
+.tabs{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:thin}
+.tab{flex:0 0 auto; border:2px solid var(--line); background:var(--surface); border-radius:999px; padding:8px 16px; font-weight:700; cursor:pointer; color:var(--ink); min-height:44px}
+.tab[aria-selected="true"]{background:var(--pink); border-color:var(--pink); color:var(--pink-ink)}
+.panel{display:flex; flex-direction:column; gap:16px}
+
+/* Cartões */
+.card{background:var(--surface); border-radius:22px; padding:18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:12px; min-width:0}
+.card.soft{background:var(--surface2); box-shadow:none}
+.chips{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px}
+.chip{background:var(--surface2); border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:2px; min-width:0}
+.chip b{font-family:var(--font-display); font-size:1.5rem; line-height:1.1; color:var(--accent-text)}
+.chip span{font-size:.85rem; color:var(--muted)}
+.tag{display:inline-block; font-size:.75rem; font-weight:700; border-radius:999px; padding:2px 10px; background:var(--pink-soft); color:var(--accent-text)}
+.tag.good{background:var(--good-soft); color:var(--good)}
+.tag.warn{background:var(--warn-soft); color:var(--warn)}
+ul.plain{margin:0; padding-left:1.2rem; display:flex; flex-direction:column; gap:6px}
+.note{background:var(--warn-soft); color:var(--ink); border-radius:16px; padding:12px 14px; font-size:.92rem}
+
+/* Tarefas */
+.day-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap}
+.day-head .date{color:var(--muted); font-size:.9rem}
+.tasks{display:flex; flex-direction:column; gap:8px}
+.task{display:flex; gap:12px; align-items:flex-start; padding:10px 12px; border-radius:14px; background:var(--surface2); cursor:pointer; position:relative; min-height:44px}
+.task input{position:absolute; opacity:0; width:100%; height:100%; left:0; top:0; margin:0; cursor:pointer}
+.box{flex:0 0 auto; width:24px; height:24px; border-radius:8px; border:2px solid var(--pink); background:var(--surface); margin-top:1px; position:relative}
+.task input:checked + .box{background:var(--pink)}
+.task input:checked + .box::after{content:""; position:absolute; left:7px; top:2px; width:6px; height:12px; border:solid var(--pink-ink); border-width:0 3px 3px 0; transform:rotate(45deg)}
+.task input:focus-visible + .box{outline:3px solid var(--pink); outline-offset:2px}
+.ttxt{display:flex; flex-direction:column; min-width:0}
+.tt{overflow-wrap:anywhere}
+.task input:checked ~ .ttxt .tt{text-decoration:line-through; text-decoration-thickness:2px; color:var(--muted)}
+.ts{font-size:.85rem}
+
+/* Tabelas e listas de semanas */
+details{background:var(--surface); border-radius:22px; box-shadow:var(--shadow); padding:4px 18px}
+summary{cursor:pointer; padding:14px 0; font-family:var(--font-display); font-weight:600; font-size:1.05rem; min-height:44px; display:flex; align-items:center; justify-content:space-between; gap:8px}
+details[open] summary{border-bottom:2px dashed var(--line)}
+.weeks{display:flex; flex-direction:column; gap:10px; padding:14px 0}
+.week{background:var(--surface2); border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:4px}
+.week.current{outline:3px solid var(--pink)}
+.week dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:2px 10px; font-size:.92rem}
+.week dt{color:var(--muted)}
+.week dd{margin:0; min-width:0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; min-width:460px; font-size:.92rem}
+th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+th{color:var(--muted); font-weight:700; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em}
+
+/* Checklist do lance */
+.qs{display:grid; gap:10px}
+.q{display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:2px solid var(--line); background:var(--surface); border-radius:18px; padding:14px; cursor:pointer; min-height:56px}
+.q .n{flex:0 0 auto; width:34px; height:34px; border-radius:50%; background:var(--pink-soft); color:var(--accent-text); display:grid; place-items:center; font-family:var(--font-display); font-weight:600}
+.q[aria-pressed="true"]{background:var(--pink-soft); border-color:var(--pink)}
+.q[aria-pressed="true"] .n{background:var(--pink); color:var(--pink-ink)}
+.btn{border:0; background:var(--pink); color:var(--pink-ink); font-weight:700; border-radius:999px; padding:12px 20px; cursor:pointer; min-height:44px}
+.btn[disabled]{opacity:.45; cursor:not-allowed}
+.btn.ghost{background:var(--pink-soft); color:var(--accent-text)}
+.status{font-weight:700; color:var(--accent-text)}
+
+/* Formulário de erros */
+form.err-form{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+label.f{display:flex; flex-direction:column; gap:4px; font-size:.85rem; color:var(--muted); font-weight:700; min-width:0}
+label.f.wide{grid-column:1 / -1}
+.inp{border:2px solid var(--line); background:var(--surface); border-radius:12px; padding:10px 12px; min-height:44px; width:100%; color:var(--ink)}
+.errs{display:flex; flex-direction:column; gap:10px}
+.err{background:var(--surface2); border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:4px; min-width:0}
+.err-top{display:flex; justify-content:space-between; gap:8px; align-items:center; flex-wrap:wrap}
+.err p{overflow-wrap:anywhere}
+.link{border:0; background:none; color:var(--accent-text); text-decoration:underline; cursor:pointer; padding:8px 0; min-height:44px}
+.foot{font-size:.82rem; color:var(--muted); text-align:center}
+@media (prefers-reduced-motion: reduce){ .ring .bar{transition:none} }
+</style>
+
+<main class="wrap">
+  <header class="hero">
+    <svg class="sparkle" style="top:10px; right:14px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>
+    <svg class="sparkle" style="bottom:12px; right:56px; width:14px; height:14px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>
+    <div class="hero-text">
+      <span class="eyebrow">Plano de 12 semanas: 30 min na semana, 1 h no fim de semana</span>
+      <h1>Xadrez da Gabi</h1>
+      <p id="hero-msg">Dia 1 feito: puzzles, lição e uma partida limpa. Amanhã começa a semana 1 de verdade.</p>
+    </div>
+    <div class="ring" role="img" aria-label="Progresso da semana 1">
+      <svg viewBox="0 0 80 80" aria-hidden="true">
+        <circle class="track" cx="40" cy="40" r="34" stroke-width="9"/>
+        <circle class="bar" id="ring-bar" cx="40" cy="40" r="34" stroke-width="9" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+      </svg>
+      <div class="ring-label"><b id="ring-num">0%</b><span>da semana 1</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Seções do plano">
+    <button class="tab" role="tab" id="tab-diario" data-tab="diario" aria-selected="true" aria-controls="p-diario">Diário</button>
+    <button class="tab" role="tab" id="tab-semana" data-tab="semana" aria-selected="false" aria-controls="p-semana">Semana 1</button>
+    <button class="tab" role="tab" id="tab-fases" data-tab="fases" aria-selected="false" aria-controls="p-fases">12 semanas</button>
+    <button class="tab" role="tab" id="tab-lance" data-tab="lance" aria-selected="false" aria-controls="p-lance">Antes do lance</button>
+    <button class="tab" role="tab" id="tab-aberturas" data-tab="aberturas" aria-selected="false" aria-controls="p-aberturas">Aberturas</button>
+    <button class="tab" role="tab" id="tab-erros" data-tab="erros" aria-selected="false" aria-controls="p-erros">Erros</button>
+  </nav>
+
+  <!-- DIÁRIO -->
+  <section class="panel" id="p-diario" role="tabpanel" aria-labelledby="tab-diario">
+    <article class="card">
+      <div class="day-head"><h2>Dia 1: domingo, 25/10</h2><span class="tag good">Concluído</span></div>
+      <div class="chips">
+        <div class="chip"><b>13 de 14</b><span>puzzles de mate em 1 com 3 coroas</span></div>
+        <div class="chip"><b>+1 lição</b><span>Checkmate with the Queen</span></div>
+        <div class="chip"><b>83,6%</b><span>sua precisão contra a Coach Mae (69,8%)</span></div>
+        <div class="chip"><b>0 erros</b><span>nenhum erro grave e nenhum blunder, 1 imprecisão</span></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>O que foi bem</h3>
+      <ul class="plain">
+        <li>Os 14 puzzles tinham dificuldade de 920 a 1491, perto do seu rating de puzzles (1310). Você acertou 13 de primeira, com 3 coroas.</li>
+        <li>Na partida com a Coach Mae (15+10) você ganhou em 26 lances, com desempenho de 1200 segundo a Revisão de Partida. Teve 1 lance Great e 6 Best.</li>
+        <li>De manhã você também ganhou do NJ2chess (15+10, de Pretas, 82,4% de precisão). Essa foi antes do plano e já conta como prova de que o jogo calmo funciona.</li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <h3>O que ajustar</h3>
+      <ul class="plain">
+        <li>O puzzle 2466948 (1421) saiu com 1 coroa. Refaça na segunda, na quarta e no domingo 01/11.</li>
+        <li>Mate em 1 já está fácil. Passei o mate em 2 para amanhã, onde você tem 100% no tema.</li>
+        <li>O mate com dama e rei 3 vezes sem erro não aparece na sua conta. Marque na lista abaixo quando conseguir.</li>
+      </ul>
+      <p class="note">A Coach Mae é um bot de 400 e erra de propósito, então a partida mostra que o método funciona, mas não prova que você ganharia de um adversário de 600. Isso a partida de terça mostra.</p>
+    </article>
+
+    <article class="card">
+      <h3>Lista do dia 1</h3>
+      <div class="tasks" id="today-tasks"></div>
+    </article>
+
+    <article class="card soft">
+      <h3>Amanhã, segunda 26/10</h3>
+      <ul class="plain">
+        <li>5 min de mate em 1 como aquecimento.</li>
+        <li>15 min de puzzles de mate em 2.</li>
+        <li>Refazer o puzzle 2466948.</li>
+        <li>10 min na lição Checkmate with the Rook.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- SEMANA 1 -->
+  <section class="panel" id="p-semana" role="tabpanel" aria-labelledby="tab-semana" hidden>
+    <article class="card soft">
+      <h2>Meta da semana</h2>
+      <p>Zero derrotas por tempo ou abandono. Em 15+10, não gaste mais de 20 segundos por lance nos 10 primeiros.</p>
+      <p><small id="week-count"></small></p>
+    </article>
+    <div id="week-list" class="panel"></div>
+  </section>
+
+  <!-- 12 SEMANAS -->
+  <section class="panel" id="p-fases" role="tabpanel" aria-labelledby="tab-fases" hidden>
+    <div id="phase-list" class="panel"></div>
+    <article class="card">
+      <h2>Checkpoints</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Quando</th><th>Meta</th><th>Se não cumprir</th></tr></thead>
+          <tbody>
+            <tr><td>Semana 4</td><td>Zero derrotas por tempo ou abandono, rating a partir de 600, os 3 mates básicos sem erro</td><td>Repetir a fase 1</td></tr>
+            <tr><td>Semana 8</td><td>Nenhum mate em 1 sofrido, rating a partir de 650, Aberturas acima de 550 e Tática acima de 600</td><td>Repetir a fase 2</td></tr>
+            <tr><td>Semana 12</td><td>Rating a partir de 700, 1 vitória a cada 3 partidas de Brancas, 5 finais básicos sem ajuda</td><td>Estender a fase 3 por 4 semanas</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <small>As metas de rating são estimativas a partir do seu histórico, sem garantia.</small>
+    </article>
+  </section>
+
+  <!-- ANTES DO LANCE -->
+  <section class="panel" id="p-lance" role="tabpanel" aria-labelledby="tab-lance" hidden>
+    <article class="card">
+      <h2>Antes de cada lance</h2>
+      <p>Toque nas quatro perguntas conforme for respondendo. Quando as quatro estiverem marcadas, pode mover.</p>
+      <div class="qs" id="qs"></div>
+      <p class="status" id="q-status" aria-live="polite">Responda as 4 perguntas.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+        <button class="btn" id="q-done" disabled>Lance feito</button>
+        <small id="q-count">0 lances checados nesta visita</small>
+      </div>
+    </article>
+    <article class="card">
+      <h3>Rei em primeiro lugar</h3>
+      <ul class="plain">
+        <li>Faça o roque até o lance 10.</li>
+        <li>Não capture peão com a dama ou a torre se o seu rei estiver no centro ou sem defensores.</li>
+        <li>Não troque o bispo ou o cavalo que protegem o seu rei sem ver a ameaça que isso abre. Foi assim que veio o mate em 1 contra o ThierryLille.</li>
+      </ul>
+    </article>
+    <article class="card">
+      <h3>Relógio em 15+10</h3>
+      <ul class="plain">
+        <li>Lances 1 a 10: no máximo 20 segundos cada. A meta é chegar ao lance 10 com mais de 13 minutos.</li>
+        <li>Meio-jogo: pense até 2 minutos só em posição crítica.</li>
+        <li>Com menos de 3 minutos antes do lance 30, jogue lances simples e prefira trocar peças.</li>
+        <li>Nunca abandone. Jogue até o fim ou use o botão de desistir.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ABERTURAS -->
+  <section class="panel" id="p-aberturas" role="tabpanel" aria-labelledby="tab-aberturas" hidden>
+    <article class="card">
+      <h2>Brancas: Sistema Londres</h2>
+      <ul class="plain">
+        <li>Lances base: 1.d4, 2.Bf4, 3.e3, 4.Cf3, 5.Bd3, 6.c3, 7.Cbd2 e 8.O-O.</li>
+        <li>Ideias: desenvolver as peças, fazer o roque curto e preparar e3-e4 ou o cavalo para e5.</li>
+        <li>Se vier ...Db6, responda Db3 ou proteja b2 com Dc1.</li>
+        <li>Mexa cada peça uma vez na abertura. Em 02/10 você jogou Bd5 e depois Bc4 de novo.</li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>Pretas contra 1.e4: 1...e5</h2>
+      <ul class="plain">
+        <li>2.Cf3 Cc6.</li>
+        <li>3.Bc4: jogue 3...Bc5, ou 3...Cf6 e, se vier 4.Cg5, responda 4...d5.</li>
+        <li>3.d4 (Escocesa): 3...exd4 4.Cxd4 e depois ...Cf6 ou ...Bc5.</li>
+        <li>3.Bb5 (Ruy López): 3...a6 4.Ba4 Cf6 5.O-O Be7.</li>
+        <li>3.Cc3: 3...Cf6. Se jogar ...Bb4, cuide do peão e4.</li>
+      </ul>
+    </article>
+    <article class="card">
+      <h2>Pretas contra 1.d4: 1...d5</h2>
+      <ul class="plain">
+        <li>2.Bf4: 2...Cf6 3.e3 e6, o mesmo esquema do Londres.</li>
+        <li>2.c4: 2...e6 3.Cc3 Cf6 4.Bg5 Be7.</li>
+        <li>2.Cf3: 2...Cf6 e depois ...e6 ou ...Bf5.</li>
+        <li>Aberturas raras (1.c3, 1.Cf3, 1.e3): ocupe o centro com ...e5 ou ...d5, desenvolva os cavalos e faça o roque.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ERROS -->
+  <section class="panel" id="p-erros" role="tabpanel" aria-labelledby="tab-erros" hidden>
+    <article class="card">
+      <h2>Registro de erros</h2>
+      <p>Depois de revisar uma partida, anote o primeiro erro e a regra que evita ele.</p>
+      <form class="err-form" id="err-form" autocomplete="off">
+        <label class="f" for="e-date">Data<input class="inp" id="e-date" type="date" required></label>
+        <label class="f" for="e-opp">Adversário<input class="inp" id="e-opp" type="text" maxlength="40" required></label>
+        <label class="f" for="e-move">Lance do erro<input class="inp" id="e-move" type="number" min="1" max="200" inputmode="numeric"></label>
+        <label class="f" for="e-cause">Causa
+          <select class="inp" id="e-cause">
+            <option>Tempo</option><option>Peça pendurada</option><option>Ameaça ignorada</option><option>Abertura</option><option>Plano</option>
+          </select>
+        </label>
+        <label class="f wide" for="e-rule">Regra para a próxima<input class="inp" id="e-rule" type="text" maxlength="160" required></label>
+        <div class="wide" style="grid-column:1 / -1"><button class="btn" type="submit">Adicionar</button></div>
+      </form>
+    </article>
+    <div class="errs" id="err-list" aria-live="polite"></div>
+    <article class="card soft">
+      <h3>Mês que vem</h3>
+      <p>A cada 4 semanas, conte qual causa aparece mais. Ela vira o tema obrigatório do mês seguinte.</p>
+      <p><small id="err-summary"></small></p>
+    </article>
+  </section>
+
+  <p class="foot">O que você marca e anota fica salvo nesta página.</p>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var DAYS = [
+    {id:"d0", name:"Domingo", date:"25/10", tag:"Dia 1", tasks:[
+      {id:"d0-puzzles", t:"Puzzles de mate em 1", s:"14 resolvidos, 13 com 3 coroas"},
+      {id:"d0-licao", t:"Lição Checkmate with the Queen", s:"Vídeo e 5 desafios, registrada na conta"},
+      {id:"d0-mate", t:"Mate com dama e rei, 3 vezes seguidas sem erro", s:"Marque quando conseguir, sem afogar o rei"},
+      {id:"d0-partida", t:"Partida com o checklist (extra, contra a Coach Mae)", s:"Vitória em 26 lances, precisão de 83,6%"}
+    ]},
+    {id:"d1", name:"Segunda", date:"26/10", tasks:[
+      {id:"d1-aquec", t:"5 min de mate em 1"},
+      {id:"d1-m2", t:"15 min de puzzles de mate em 2"},
+      {id:"d1-refaz", t:"Refazer o puzzle 2466948", s:"O único com 1 coroa no dia 1"},
+      {id:"d1-torre", t:"10 min na lição Checkmate with the Rook"}
+    ]},
+    {id:"d2", name:"Terça", date:"27/10", tasks:[
+      {id:"d2-partida", t:"1 partida 15+10 com o checklist", s:"As 4 perguntas escritas ao lado"}
+    ]},
+    {id:"d3", name:"Quarta", date:"28/10", tasks:[
+      {id:"d3-rev", t:"15 min revisando a partida de terça"},
+      {id:"d3-pend", t:"15 min de puzzles de peça pendurada e remover defensor"},
+      {id:"d3-refaz", t:"Refazer o puzzle 2466948 (dia 3)"}
+    ]},
+    {id:"d4", name:"Quinta", date:"29/10", tasks:[
+      {id:"d4-partida", t:"1 partida 15+10 com o checklist"}
+    ]},
+    {id:"d5", name:"Sexta", date:"30/10", tasks:[
+      {id:"d5-rev", t:"15 min revisando uma derrota"},
+      {id:"d5-londres", t:"15 min de Sistema Londres contra o bot", s:"d4, Bf4, e3, Cf3, Bd3"}
+    ]},
+    {id:"d6", name:"Sábado", date:"31/10", tasks:[
+      {id:"d6-partida", t:"30 min: 1 partida 15+10 com o checklist"},
+      {id:"d6-rev", t:"20 min revisando a partida (Game Review + 1 erro no registro)"},
+      {id:"d6-londres", t:"10 min de abertura: Londres ou resposta ao 1.d4"}
+    ]},
+    {id:"d7", name:"Domingo", date:"01/11", tasks:[
+      {id:"d7-erros", t:"20 min refazendo os puzzles errados da semana"},
+      {id:"d7-finais", t:"25 min de finais (tema da semana)"},
+      {id:"d7-meta", t:"15 min: reler o registro de erros e conferir a meta (zero derrotas por tempo ou abandono)"}
+    ]}
+  ];
+
+  var PHASES = [
+    {name:"Fase 1: disciplina (semanas 1 a 4)", weeks:[
+      {n:1, puz:"Mate em 1", fin:"Mate com dama e rei", ab:"Londres: d4, Bf4, e3", foco:"Checklist das 4 perguntas"},
+      {n:2, puz:"Peça pendurada", fin:"Mate com duas torres", ab:"Londres: Cf3, Bd3, c3, Cbd2, roque", foco:"Orçamento de tempo nos lances 1 a 10"},
+      {n:3, puz:"Mate em 2", fin:"Oposição", ab:"Londres contra 1...d5 e contra ...c5", foco:"Roque até o lance 10"},
+      {n:4, puz:"Garfos", fin:"Regra do quadrado", ab:"Revisão das 3 partidas da fase", foco:"Zero abandono e zero derrota no tempo"}
+    ]},
+    {name:"Fase 2: táticas e rei (semanas 5 a 8)", weeks:[
+      {n:5, puz:"Cravadas e espetos", fin:"Peão passado e promoção", ab:"Pretas contra 1.e4: 1...e5", foco:"Segurança do rei"},
+      {n:6, puz:"Remover defensor e desvio", fin:"Rei ativo no final", ab:"Pretas contra a Escocesa e a Italiana", foco:"Não capturar peão sem checar ameaças"},
+      {n:7, puz:"Ataque descoberto e raio-X", fin:"Torre atrás do peão passado", ab:"Pretas contra 1.d4: 1...d5 e Cf6", foco:"Trocar peças quando estiver à frente"},
+      {n:8, puz:"Mate em 2 e 3 variados", fin:"Torre: cortar o rei adversário", ab:"Revisão das aberturas jogadas", foco:"Checkpoint 2"}
+    ]},
+    {name:"Fase 3: estratégia e cálculo (semanas 9 a 12)", weeks:[
+      {n:9, puz:"Temas misturados, calculando 3 lances", fin:"Finais de peões revisados", ab:"Londres: estrutura de peões e quebra com e4", foco:"Peças ativas e casas fortes"},
+      {n:10, puz:"Lista de 2 a 3 lances candidatos", fin:"Torre ativa contra torre passiva", ab:"Fixar 1 linha contra cada defesa comum", foco:"Um plano a cada 10 lances"},
+      {n:11, puz:"Puzzles sob limite de 2 min", fin:"Finais mistos de torre e peões", ab:"Revisão do repertório inteiro", foco:"Converter vantagem sem pressa"},
+      {n:12, puz:"Refazer todos os puzzles errados", fin:"Teste: 5 finais básicos sem ajuda", ab:"Revisão final", foco:"Checkpoint 3 e novo plano"}
+    ]}
+  ];
+
+  var QS = [
+    "O que o último lance dele ameaça? Xeques, capturas e mates.",
+    "O que está sem defesa, nas minhas peças e nas dele?",
+    "Meu lance deixa algo solto ou abre uma linha para o meu rei?",
+    "Tem um xeque, uma captura ou uma ameaça melhor?"
+  ];
+
+  var DEFAULT_STATE = {
+    done: {},
+    errors: []
+  };
+
+  var LS_KEY = "xadrez-gabi-publico-v1";
+  var state = clone(DEFAULT_STATE);
+  var dbRef = null, timer = null, dirty = false, chain = Promise.resolve();
+
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function $(s, r){ return (r || document).querySelector(s); }
+  function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+
+  /* ---- Persistência ---- */
+  function readLocal(){
+    try { var raw = localStorage.getItem(LS_KEY); if(raw){ var o = JSON.parse(raw); if(o && o.done && o.errors) return o; } } catch(e){}
+    return null;
+  }
+  function writeLocal(){ try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){} }
+  function persist(){
+    writeLocal();
+    if(!dbRef) return;
+    dirty = true;
+    clearTimeout(timer);
+    timer = setTimeout(function(){
+      chain = chain.then(function(){
+        var snapshot = clone(state);
+        return dbRef.set(snapshot).then(function(){ dirty = false; });
+      }).catch(function(){ dirty = false; });
+    }, 500);
+  }
+
+  /* ---- Tarefas ---- */
+  function taskLabel(task){
+    var label = el("label", "task");
+    var input = document.createElement("input");
+    input.type = "checkbox"; input.id = "t-" + task.id; input.setAttribute("data-id", task.id);
+    var box = el("span", "box"); box.setAttribute("aria-hidden", "true");
+    var txt = el("span", "ttxt");
+    txt.appendChild(el("span", "tt", task.t));
+    if(task.s) txt.appendChild(el("small", "ts", task.s));
+    label.appendChild(input); label.appendChild(box); label.appendChild(txt);
+    return label;
+  }
+  function renderTasks(){
+    var today = $("#today-tasks"); today.textContent = "";
+    DAYS[0].tasks.forEach(function(t){ today.appendChild(taskLabel(t)); });
+    var list = $("#week-list"); list.textContent = "";
+    DAYS.forEach(function(day, i){
+      if(i === 0) return;
+      var card = el("article", "card"); card.setAttribute("data-day", day.id);
+      var head = el("div", "day-head");
+      var h = el("h3", null, day.name);
+      var right = el("span", "date", day.date);
+      head.appendChild(h); head.appendChild(right);
+      var tasks = el("div", "tasks");
+      day.tasks.forEach(function(t){ tasks.appendChild(taskLabel(t)); });
+      card.appendChild(head); card.appendChild(tasks);
+      list.appendChild(card);
+    });
+  }
+  function applyDone(){
+    $$("input[data-id]").forEach(function(inp){ inp.checked = !!state.done[inp.getAttribute("data-id")]; });
+    var total = 0, done = 0;
+    DAYS.forEach(function(day){ day.tasks.forEach(function(t){ total++; if(state.done[t.id]) done++; }); });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    $("#ring-num").textContent = pct + "%";
+    var circ = 213.6;
+    $("#ring-bar").setAttribute("stroke-dashoffset", String(circ * (1 - pct / 100)));
+    $("#week-count").textContent = done + " de " + total + " tarefas feitas";
+  }
+
+  /* ---- Erros ---- */
+  function fmtDate(iso){ var p = String(iso || "").split("-"); return p.length === 3 ? p[2] + "/" + p[1] : ""; }
+  function renderErrors(){
+    var list = $("#err-list"); list.textContent = "";
+    state.errors.forEach(function(e, i){
+      var card = el("div", "err");
+      var top = el("div", "err-top");
+      var who = el("b", null, (fmtDate(e.date) ? fmtDate(e.date) + " · " : "") + e.opp);
+      var tag = el("span", "tag", e.cause + (e.move ? " · lance " + e.move : ""));
+      top.appendChild(who); top.appendChild(tag);
+      var rule = el("p", null, e.rule);
+      var del = el("button", "link", "Remover"); del.type = "button"; del.setAttribute("data-del", String(i));
+      card.appendChild(top); card.appendChild(rule); card.appendChild(del);
+      list.appendChild(card);
+    });
+    if(!state.errors.length) list.appendChild(el("p", null, "Nenhum erro anotado ainda. Depois da sua primeira revisão, ele aparece aqui."));
+    var counts = {};
+    state.errors.forEach(function(e){ counts[e.cause] = (counts[e.cause] || 0) + 1; });
+    var keys = Object.keys(counts).sort(function(a, b){ return counts[b] - counts[a]; });
+    $("#err-summary").textContent = keys.length ? "Causa mais frequente até agora: " + keys[0] + " (" + counts[keys[0]] + ")." : "";
+  }
+
+  /* ---- Fases ---- */
+  function renderPhases(){
+    var wrap = $("#phase-list"); wrap.textContent = "";
+    PHASES.forEach(function(ph, idx){
+      var d = document.createElement("details"); if(idx === 0) d.open = true;
+      var s = document.createElement("summary"); s.textContent = ph.name;
+      var weeks = el("div", "weeks");
+      ph.weeks.forEach(function(w){
+        var c = el("div", "week" + (w.n === 1 ? " current" : ""));
+        var head = el("div", "day-head");
+        head.appendChild(el("h3", null, "Semana " + w.n));
+        if(w.n === 1) head.appendChild(el("span", "tag", "Agora"));
+        var dl = document.createElement("dl");
+        [["Puzzles", w.puz], ["Finais", w.fin], ["Abertura", w.ab], ["Partidas", w.foco]].forEach(function(r){
+          var dt = el("dt", null, r[0]); var dd = el("dd", null, r[1]); dl.appendChild(dt); dl.appendChild(dd);
+        });
+        c.appendChild(head); c.appendChild(dl); weeks.appendChild(c);
+      });
+      d.appendChild(s); d.appendChild(weeks); wrap.appendChild(d);
+    });
+  }
+
+  /* ---- Antes do lance ---- */
+  var picked = [false, false, false, false], checked = 0;
+  function renderQs(){
+    var wrap = $("#qs"); wrap.textContent = "";
+    QS.forEach(function(q, i){
+      var b = el("button", "q"); b.type = "button"; b.setAttribute("data-q", String(i));
+      b.setAttribute("aria-pressed", picked[i] ? "true" : "false");
+      b.appendChild(el("span", "n", String(i + 1)));
+      b.appendChild(el("span", null, q));
+      wrap.appendChild(b);
+    });
+    var all = picked.every(Boolean);
+    $("#q-status").textContent = all ? "Pode mover." : "Responda as 4 perguntas.";
+    $("#q-done").disabled = !all;
+    $("#q-count").textContent = checked + (checked === 1 ? " lance checado" : " lances checados") + " nesta visita";
+  }
+
+  /* ---- Abas ---- */
+  function showTab(name){
+    var found = false;
+    $$(".tab").forEach(function(t){
+      var on = t.getAttribute("data-tab") === name; if(on) found = true;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    if(!found) return;
+    $$(".panel[role=tabpanel]").forEach(function(p){ p.hidden = p.id !== "p-" + name; });
+  }
+
+  /* ---- Eventos ---- */
+  document.addEventListener("change", function(e){
+    var t = e.target;
+    if(t && t.matches && t.matches("input[data-id]")){
+      var id = t.getAttribute("data-id");
+      if(t.checked) state.done[id] = true; else delete state.done[id];
+      applyDone(); persist();
+    }
+  });
+  document.addEventListener("click", function(e){
+    var tab = e.target.closest && e.target.closest(".tab");
+    if(tab){ showTab(tab.getAttribute("data-tab")); return; }
+    var q = e.target.closest && e.target.closest(".q");
+    if(q){ var i = Number(q.getAttribute("data-q")); picked[i] = !picked[i]; renderQs(); return; }
+    var del = e.target.closest && e.target.closest("[data-del]");
+    if(del){ state.errors.splice(Number(del.getAttribute("data-del")), 1); renderErrors(); persist(); return; }
+  });
+  $("#q-done").addEventListener("click", function(){
+    checked++; picked = [false, false, false, false]; renderQs();
+  });
+  $("#err-form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var date = $("#e-date").value, opp = $("#e-opp").value.trim(), rule = $("#e-rule").value.trim();
+    if(!date || !opp || !rule) return;
+    var mv = parseInt($("#e-move").value, 10);
+    state.errors.unshift({date: date, opp: opp, move: isNaN(mv) ? null : mv, cause: $("#e-cause").value, rule: rule});
+    $("#e-opp").value = ""; $("#e-move").value = ""; $("#e-rule").value = "";
+    renderErrors(); persist();
+  });
+
+  /* ---- Início ---- */
+  var saved = readLocal(); if(saved) state = saved;
+  renderTasks(); renderPhases(); renderQs(); renderErrors(); applyDone();
+  try { $("#e-date").value = new Date().toISOString().slice(0, 10); } catch(e){}
+  var hash = (location.hash || "").replace("#", "");
+  if(hash) showTab(hash);
+
+  if(window.claude && window.claude.use){
+    window.claude.use("db").then(function(db){
+      if(!db) return;
+      var ref = db.doc("plano/estado");
+      ref.onSnapshot(function(snap){
+        if(!dbRef) dbRef = ref;
+        if(snap.metadata.hasPendingWrites || dirty) return;
+        if(!snap.exists) return;
+        var d = JSON.parse(JSON.stringify(snap.data()));
+        var next = {done: d.done || {}, errors: d.errors || []};
+        if(JSON.stringify(next) === JSON.stringify(state)) return;
+        state = next; writeLocal(); applyDone(); renderErrors();
+      }, function(){ /* sem sincronização: segue com o armazenamento local */ });
+      dbRef = ref;
+    }).catch(function(){});
+  }
+})();
+</script>
