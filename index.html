@@ -401,7 +401,7 @@ label.f.wide{grid-column:1 / -1}
   ];
 
   var DEFAULT_STATE = {
-    done: {},
+    done: {"d0-puzzles":true, "d0-licao":true, "d0-partida":true},
     errors: []
   };
 
@@ -576,7 +576,7 @@ label.f.wide{grid-column:1 / -1}
   });
 
   /* ---- Início ---- */
-  var saved = readLocal(); if(saved) state = saved;
+  var saved = readLocal(); if(saved){ state = saved; Object.keys(DEFAULT_STATE.done).forEach(function(k){ state.done[k] = true; }); }
   renderTasks(); renderPhases(); renderQs(); renderErrors(); applyDone();
   try { $("#e-date").value = new Date().toISOString().slice(0, 10); } catch(e){}
   var hash = (location.hash || "").replace("#", "");
